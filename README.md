@@ -1,33 +1,89 @@
-# AUTO_FRONT_POM_FACTORY
+# AUTO_FRONT_POM_FACTORY 🚀
 
-Proyecto de automatización de pruebas de interfaz de usuario (UI) utilizando **Serenity BDD**, **Cucumber** y **Java**, siguiendo el patrón de diseño **Page Object Model (POM)**.
+Proyecto de automatización de pruebas de interfaz de usuario (UI) para el sistema de gestión de tickets de **Atlas Fiber**. Este marco utiliza **Serenity BDD**, **Cucumber** y **Java 21**, implementando el patrón de diseño **Page Object Model (POM)**.
 
-## Requisitos
-- Java 21+ instalado.
-- Gradle instalado (o usar `./gradlew`).
-- Google Chrome instalado.
+---
 
-## Estructura del proyecto
-- `src/test/java/com/automatizacion/pages/`: Clases de mapeo de elementos y acciones de página.
-- `src/test/java/com/automatizacion/steps/`: Definiciones de los pasos de Cucumber.
-- `src/test/java/com/automatizacion/runners/`: Clase `TestRunner` para ejecutar las pruebas.
-- `src/test/resources/features/`: Escenarios de prueba escritos en lenguaje Gherkin.
-- `src/test/resources/serenity.conf`: Configuración del framework y del WebDriver.
+## 🛠️ Tecnologías y Versiones
 
-## Cómo ejecutar
+*   **Java**: 21 (Amazon Corretto / Temurin)
+*   **Framework**: Serenity BDD 4.0.12 (Migrado para compatibilidad con Chromium moderno)
+*   **BDD**: Cucumber 7.15.0
+*   **Gestor de dependencias**: Gradle
+*   **Navegador**: Chrome / Chromium (Ejecución local y headless)
 
-Para ejecutar todas las pruebas, utiliza el siguiente comando:
+---
+
+## 📂 Estructura del Proyecto
+
+```text
+src/test/java/com/automatizacion/
+├── pages/          # Clases Page Object (Mapeo de elementos y acciones de UI)
+│   ├── FormularioPage.java
+│   └── TicketsPage.java
+├── steps/          # Clases Step Definition (Conexión Gherkin -> Java)
+│   ├── FormularioSteps.java
+│   └── TicketsSteps.java
+└── runners/        # Clase TestRunner para ejecución de Cucumber
+    └── TestRunner.java
+
+src/test/resources/
+├── features/       # Escenarios de prueba en lenguaje Gherkin (Español)
+│   └── gestion_tickets.feature
+└── serenity.conf   # Configuración centralizada de WebDriver y Entornos
+```
+
+---
+
+## 🚀 Cómo empezar
+
+### Requisitos previos
+1. Tener instalado **Java 21**.
+2. Tener **Chrome** o **Chromium** instalado.
+3. Asegurarse de que el frontend esté corriendo en `http://localhost`.
+
+### Ejecución de Pruebas
+
+Para ejecutar todos los escenarios y generar el reporte:
 ```bash
 ./gradlew test
 ```
 
-Para filtrar por tags:
+Para filtrar por etiquetas específicas (tags):
 ```bash
-./gradlew test -Dcucumber.filter.tags="@mi_tag"
+./gradlew test -Dcucumber.filter.tags="@reporte"
+./gradlew test -Dcucumber.filter.tags="@dashboard or @filtro"
 ```
 
-## Ver reporte
-Después de la ejecución, el reporte detallado de Serenity se genera en la siguiente ruta:
-`target/site/serenity/index.html`
+---
 
-Abre este archivo en cualquier navegador para visualizar los resultados paso a paso y las capturas de pantalla de los fallos.
+## 📊 Reportes de Serenity
+
+Una de las mayores ventajas de este proyecto son sus reportes vivos. Después de cada ejecución, puedes visualizar el resultado detallado con capturas de pantalla:
+
+1. Navega a `target/site/serenity/`.
+2. Abre el archivo `index.html` en tu navegador.
+
+*Comando rápido en Linux:*
+```bash
+xdg-open target/site/serenity/index.html
+```
+
+---
+
+## 🏗️ Patrón de Diseño: POM (Page Object Model)
+
+Este proyecto sigue un estándar **Senior** de POM:
+- **Páginas**: Extienden `PageObject` y utilizan la anotación `@DefaultUrl`.
+- **Inyección**: Los Page Objects se inyectan automáticamente en los Steps sin necesidad de instanciación manual.
+- **Acciones**: Las interacciones son semánticas y encapsulan esperas explícitas para mayor estabilidad.
+- **Validaciones**: Se utiliza **AssertJ** para aserciones fluidas y legibles.
+
+---
+
+## ⚙️ Configuración (serenity.conf)
+
+La configuración se ha migrado a un formato centralizado que permite:
+- **Modo Headless**: Activado por defecto para ejecuciones rápidas en entornos Linux/CI.
+- **Binarios**: Configurado para buscar Chromium en `/usr/bin/chromium`.
+- **Envoltorios**: Uso de flags como `--no-sandbox` e `--incognito` para asegurar un entorno de prueba limpio.
